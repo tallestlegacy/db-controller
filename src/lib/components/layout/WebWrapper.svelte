@@ -1,7 +1,11 @@
 <script lang="ts">
+	import { QueryClientProvider } from '@sveltestack/svelte-query';
 	import { ModeWatcher } from 'mode-watcher';
+	import { queryClient } from '@/queries';
 </script>
 
-<ModeWatcher />
+<ModeWatcher track />
 
-<slot />
+<QueryClientProvider client={queryClient}>
+	<slot />
+</QueryClientProvider>

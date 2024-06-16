@@ -1,5 +1,5 @@
 import type { RequestHandler } from './$types';
-import mongo from '../mongo.server';
+import mongo from '@/../routes/api/mongo.server';
 import { error, json } from '@sveltejs/kit';
 
 export const GET: RequestHandler = async () => {

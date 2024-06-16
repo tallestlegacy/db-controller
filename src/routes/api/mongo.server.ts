@@ -1,5 +1,5 @@
 import { MONGODB_DATABASE, MONGODB_URL } from '$env/static/private';
-import { MongoClient, ServerApiVersion } from 'mongodb';
+import { FindCursor, MongoClient, ServerApiVersion, type Filter, type FindOptions } from 'mongodb';
 
 const uri = MONGODB_URL;
 
@@ -18,4 +18,14 @@ async function run(func: () => any) {
 
 const db = client.db(MONGODB_DATABASE);
 
-export default { client, run, db };
+async function findDocuments(cursor: FindCursor) {
+	const docs = [];
+
+	for await (const doc of cursor) {
+		docs.push(doc);
+	}
+
+	return docs;
+}
+
+export default { client, run, db, readCursor: findDocuments };
