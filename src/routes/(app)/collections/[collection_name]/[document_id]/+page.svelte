@@ -1,24 +1,24 @@
 <script lang="ts">
-	import { page } from '$app/stores';
 	import Field from '@/components/custom_forms/Field.svelte';
 	import type { Field as SchemaField } from '@/../types/cms';
-
+	import { page } from '$app/stores';
 	import {
 		createDocument,
 		deleteDocument,
 		updateDocument,
 		useGetSingleDocument
 	} from '@/queries/collections';
-	import { useGetSchema } from '@/queries/schemas';
 	import { Button } from '@/components/ui/button';
 	import { goto } from '$app/navigation';
-	import { queryClient } from '@/queries';
+	import { useGetSchema } from '@/queries/schemas';
+	import { useQueryClient } from '@sveltestack/svelte-query';
 
 	let { document_id, collection_name } = $page.params;
 	let isNew = document_id === '$create';
 
 	const schemaQuery = useGetSchema(collection_name);
 	const docQuery = useGetSingleDocument(collection_name, document_id);
+	const queryClient = useQueryClient();
 
 	let isSaving = $state(false);
 	let form = $state({});
@@ -65,8 +65,8 @@
 			isSaving = true;
 			if (isNew) {
 				const _id = await createDocument(collection_name, form);
+				queryClient.invalidateQueries('all-documents');
 				goto(`/collections/${collection_name}/${_id}`, { replaceState: true });
-				queryClient.invalidateQueries(['all-documents', collection_name]);
 			} else {
 				await updateDocument(collection_name, document_id, form);
 			}
@@ -76,13 +76,13 @@
 	}
 
 	async function deleteDoc() {
-		await deleteDocument(collection_name, collection_name);
+		await deleteDocument(collection_name, document_id);
+		queryClient.invalidateQueries('all-documents');
 		goto(`/collections/${collection_name}`);
-		queryClient.invalidateQueries(['all-documents', collection_name]);
 	}
 </script>
 
-<div class="flex w-full max-w-screen-md flex-col gap-4 p-4">
+<div class="mx-auto flex w-full max-w-screen-md flex-col gap-4 p-4">
 	{#if $schemaQuery.data && $schemaQuery.data.fields}
 		{#each $schemaQuery.data.fields as _field}
 			{#if _field.name.toString()}
@@ -97,7 +97,7 @@
 
 		<Button on:click={save} disabled={isSaving}>{isNew ? 'Create' : 'Update'}</Button>
 		{#if !isNew}
-			<Button on:click={deleteDoc} variant="destructive">Delete</Button>
+			<Button on:click={deleteDoc} variant="destructive" class="w-fit self-end">Delete</Button>
 		{/if}
 	{/if}
 </div>
