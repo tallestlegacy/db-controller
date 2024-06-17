@@ -5,11 +5,12 @@
 	import { Textarea } from '@/components/ui/textarea';
 	import { TriangleAlert } from 'lucide-svelte';
 	import DatePicker from './DatePicker.svelte';
+	import { Switch } from '@/components/ui/switch';
 
 	let _type: FieldType = P.STRING;
 	export { _type as type };
 
-	export let value: string | number;
+	export let value: string | number | Date | boolean;
 	export let label: string;
 	export let placeholder: string | undefined = undefined;
 	export let disabled: boolean = false;
@@ -35,6 +36,10 @@
 
 	{#if _type === P.DATE}
 		<DatePicker bind:value {disabled} />
+	{/if}
+
+	{#if _type === P.BOOLEAN}
+		<Switch bind:checked={value} {disabled} />
 	{/if}
 
 	<!-- errors -->
