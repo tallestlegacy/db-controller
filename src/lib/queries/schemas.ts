@@ -19,8 +19,12 @@ export function useGetAllSchemas() {
 	return useQuery('all-schemas', getSchemas);
 }
 
-export async function getSchema(_id: string) {
-	return await (await fetch(`/api/schemas/${_id}`)).json();
+export async function getSchema(name: string) {
+	return (await (await fetch(`/api/schemas/${name}`)).json()) as Collection;
+}
+
+export function useGetSchema(name: string) {
+	return useQuery(['schema', name], async () => await getSchema(name));
 }
 
 export async function updateSchema(_id: string, form: Collection) {

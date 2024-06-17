@@ -15,7 +15,7 @@ export const GET: RequestHandler = async () => {
 };
 
 // Create a collection
-export const POST: RequestHandler = async ({ request }) => {
+export const POST: RequestHandler = async ({ request, params }) => {
 	const collectionName = (await request.json())?.collectionName;
 	if (!collectionName) return error(400, { message: 'Needs the <collectionName> field' });
 

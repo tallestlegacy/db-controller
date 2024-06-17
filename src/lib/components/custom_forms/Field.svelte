@@ -4,6 +4,7 @@
 	import Label from '@/components/ui/label/label.svelte';
 	import { Textarea } from '@/components/ui/textarea';
 	import { TriangleAlert } from 'lucide-svelte';
+	import DatePicker from './DatePicker.svelte';
 
 	let _type: FieldType = P.STRING;
 	export { _type as type };
@@ -30,6 +31,10 @@
 
 	{#if _type === P.NUMBER}
 		<Input type="number" bind:value {disabled} />
+	{/if}
+
+	{#if _type === P.DATE}
+		<DatePicker bind:value {disabled} />
 	{/if}
 
 	<!-- errors -->

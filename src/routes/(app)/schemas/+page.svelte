@@ -1,9 +1,11 @@
 <script>
 	import * as Card from '@/components/ui/card';
+	import * as Ctx from '@/components/ui/context-menu';
 	import { Edit, FilePlus, PackagePlus } from 'lucide-svelte';
 	import { useGetAllSchemas } from '@/queries/schemas';
 	import { Skeleton } from '@/components/ui/skeleton';
 	import { Badge } from '@/components/ui/badge';
+	import { goto } from '$app/navigation';
 
 	const query = useGetAllSchemas();
 </script>
@@ -22,29 +24,29 @@
 
 	{#if $query.data}
 		{#each $query.data as schema}
-			<Card.Card class="relative z-0 flex h-full min-h-[200px] flex-col gap-4 p-4">
-				<Badge class="w-fit text-sm">{schema.name}</Badge>
-				<span class="text-xl">{schema.title}</span>
-				<p class="line-clamp-3 text-xs">{schema.description}</p>
-
-				<div
-					class="absolute inset-0 z-10 flex rounded-[inherit] bg-background/90 opacity-0 transition-all hover:opacity-100"
-				>
-					<a
-						href="/schemas/{schema._id}"
-						class="flex flex-1 items-center justify-center text-foreground/50 transition-all hover:text-foreground"
-					>
-						<Edit class="color" />
+			<Ctx.Root>
+				<Ctx.Trigger>
+					<a href="/schemas/{schema.name}">
+						<Card.Card class="relative z-0 flex h-full min-h-[200px] flex-col gap-4 p-4">
+							<Badge class="w-fit text-sm">{schema.name}</Badge>
+							<span class="text-xl">{schema.title}</span>
+							<p class="line-clamp-3 text-xs">{schema.description}</p>
+						</Card.Card>
 					</a>
-					<div class="w-px bg-border"></div>
-					<a
-						href="/collections/{schema.name}/$create"
-						class="flex flex-1 items-center justify-center text-foreground/50 transition-all hover:text-foreground"
-					>
-						<FilePlus />
-					</a>
-				</div>
-			</Card.Card>
+				</Ctx.Trigger>
+				<Ctx.Content>
+					<Ctx.Item onclick={() => goto(`/schemas/${schema.name}`)}>
+						<span>Edit schema</span>
+					</Ctx.Item>
+					<Ctx.Separator />
+					<Ctx.Item onclick={() => goto(`/collections/${schema.name}/$create`)}>
+						<span>Create document</span>
+					</Ctx.Item>
+					<Ctx.Item onclick={() => goto(`/collections/${schema.name}`)}>
+						<span>View all documents</span>
+					</Ctx.Item>
+				</Ctx.Content>
+			</Ctx.Root>
 		{/each}
 	{/if}
 

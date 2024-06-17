@@ -1,18 +1,16 @@
 import type { RequestHandler } from './$types';
-
 import mongo from '@/../routes/api/mongo.server';
-import { json } from '@sveltejs/kit';
+import { error, json } from '@sveltejs/kit';
 import { ObjectId } from 'mongodb';
 
-// Find an arbitrary document
+// Find an arbitrary documents
 export const GET: RequestHandler = async ({ params }) => {
 	const collectionName = params.collection_name;
 	const _id = new ObjectId(params.document_id);
 
 	const res = await mongo.run(async function () {
 		const collection = mongo.db.collection(collectionName);
-		const cursor = collection.find({ _id });
-		return await mongo.readCursor(cursor);
+		return collection.findOne({ _id });
 	});
 
 	return json(res);
@@ -25,13 +23,25 @@ export const PUT: RequestHandler = async ({ params, request }) => {
 	const body = await request.json();
 	delete body._id;
 
-	const res = await mongo.run(async function () {
-		const collection = mongo.db.collection(collectionName);
-		const res = await collection.updateOne({ _id }, { $set: body });
-		return res.modifiedCount;
-	});
+	try {
+		const res = await mongo.run(async function () {
+			const collection = mongo.db.collection(collectionName);
+			const res = await collection.updateOne(
+				{ _id },
+				{
+					$set: {
+						data: body,
+						'metadata.updatedAt': new Date()
+					}
+				}
+			);
+			return res.modifiedCount;
+		});
 
-	return res;
+		return json(res);
+	} catch (e) {
+		return error(500, Error(JSON.stringify(e)));
+	}
 };
 
 // Find an arbitrary document

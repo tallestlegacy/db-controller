@@ -17,6 +17,7 @@ export interface Field {
 	name: string; // unique identifier (ie. to be used as JSON key),
 	description: string; // the field description or question,
 	type: keyof typeof Primitive; // for reusable form component to bind to
+	isIdentifier: boolean;
 }
 
 export interface Collection {
@@ -24,6 +25,14 @@ export interface Collection {
 	name: string; // eg. blog_posts
 	description: string; // eg. Periodic publications that I think up regularly
 	fields: Field[];
+}
+
+export interface Document {
+	data: any;
+	metadata: {
+		createdAt: Date;
+		updatedAt: Date;
+	};
 }
 
 // Datasets contain multiple collections

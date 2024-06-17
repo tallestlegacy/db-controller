@@ -7,26 +7,42 @@ import { error, json } from '@sveltejs/kit';
 export const GET: RequestHandler = async ({ params }) => {
 	const collectionName = params.collection_name;
 
-	const res = await mongo.run(async function () {
-		const collection = mongo.db.collection(collectionName);
-		const cursor = collection.find({});
-		return await mongo.readCursor(cursor);
-	});
+	try {
+		const res = await mongo.run(async function () {
+			const collection = mongo.db.collection(collectionName);
+			const cursor = collection.find({});
+			return await mongo.readCursor(cursor);
+		});
 
-	return json(res);
+		return json(res);
+	} catch (e) {
+		return error(500, Error(JSON.stringify(e)));
+	}
 };
 
 // Create arbitrary document
 
-export const PUT: RequestHandler = async ({ params, request }) => {
+export const POST: RequestHandler = async ({ params, request }) => {
 	const collectionName = params.collection_name;
 	const body = await request.json();
 
-	const res = await mongo.run(async function () {
-		const collection = mongo.db.collection(collectionName);
-		const res = await collection.insertOne(body);
-		return res.insertedId;
-	});
+	const date = new Date();
 
-	return res;
+	try {
+		const res = await mongo.run(async function () {
+			const collection = mongo.db.collection(collectionName);
+			const res = await collection.insertOne({
+				data: body,
+				metadata: {
+					createdAt: date,
+					updatedAt: date
+				}
+			});
+			return res.insertedId;
+		});
+
+		return json(res);
+	} catch (e) {
+		return error(500, Error(JSON.stringify(e)));
+	}
 };

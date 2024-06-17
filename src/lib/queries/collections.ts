@@ -19,18 +19,17 @@ export async function getAllDocuments(collectionName: string) {
 	return await (await fetch(`/api/collections/${collectionName}`)).json();
 }
 
-export async function useGetAllDocuments(collectionName: string) {
-	return useQuery(
-		['all-documents', collectionName],
-		async () => await getAllDocuments(collectionName)
-	);
+export function useGetAllDocuments(collectionName: string) {
+	return useQuery(['all-documents', collectionName], async function () {
+		return await getAllDocuments(collectionName);
+	});
 }
 
 export async function getSingleDocument(collectionName: string, documentId: string) {
 	return await (await fetch(`/api/collections/${collectionName}/${documentId}`)).json();
 }
 
-export async function useGetSingleDocument(collectionName: string, documentId: string) {
+export function useGetSingleDocument(collectionName: string, documentId: string) {
 	return useQuery(
 		['document', collectionName, documentId],
 		async () => await getSingleDocument(collectionName, documentId)
@@ -50,12 +49,14 @@ export async function updateDocument(collectionName: string, documentId: string,
 	delete form._id;
 	return await (
 		await fetch(`/api/collections/${collectionName}/${documentId}`, {
-			method: 'POST',
+			method: 'PUT',
 			body: JSON.stringify(form)
 		})
 	).json();
 }
 
 export async function deleteDocument(collectionName: string, documentId: string) {
-	return await (await fetch(`/api/collections/${collectionName}/${documentId}`)).json();
+	return await (
+		await fetch(`/api/collections/${collectionName}/${documentId}`, { method: 'DELETE' })
+	).json();
 }
