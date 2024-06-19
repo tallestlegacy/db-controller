@@ -47,6 +47,8 @@ export async function createDocument(collectionName: string, form: any) {
 
 export async function updateDocument(collectionName: string, documentId: string, form: any) {
 	delete form._id;
+	delete form._createdAt;
+	delete form._updatedAt;
 	return await (
 		await fetch(`/api/collections/${collectionName}/${documentId}`, {
 			method: 'PUT',

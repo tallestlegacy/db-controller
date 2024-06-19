@@ -1,7 +1,8 @@
-import type { RequestHandler } from './$types';
 import mongo from '@/../routes/api/mongo.server';
 import { error, json } from '@sveltejs/kit';
 import { ObjectId } from 'mongodb';
+
+import type { RequestHandler } from './$types';
 
 // Find an arbitrary documents
 export const GET: RequestHandler = async ({ params }) => {
@@ -30,8 +31,8 @@ export const PUT: RequestHandler = async ({ params, request }) => {
 				{ _id },
 				{
 					$set: {
-						data: body,
-						'metadata.updatedAt': new Date()
+						...body,
+						_updatedAt: new Date()
 					}
 				}
 			);

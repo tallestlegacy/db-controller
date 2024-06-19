@@ -5,7 +5,8 @@ export enum Primitive {
 	NUMBER = 'NUMBER',
 	STRING = 'STRING',
 	TEXT = 'TEXT',
-	DATE = 'DATE'
+	DATE = 'DATE',
+	MARKDOWN = 'MARKDOWN'
 	// DATETIME = 'DATETIME'
 	// GEOPOINT = "GEOPOINT",
 }
@@ -27,13 +28,7 @@ export interface Collection {
 	fields: Field[];
 }
 
-export interface Document {
-	data: any;
-	metadata: {
-		createdAt: Date;
-		updatedAt: Date;
-	};
-}
+export type Document = any;
 
 // Datasets contain multiple collections
 export interface Dataset {

@@ -1,11 +1,10 @@
 // Update schema
-
 import { SCHEMA_COLLECTION_NAME } from '$env/static/private';
-import type { RequestHandler } from './$types';
-
-import mongo from '../../mongo.server';
 import { json } from '@sveltejs/kit';
 import { ObjectId } from 'mongodb';
+
+import mongo from '../../mongo.server';
+import type { RequestHandler } from './$types';
 
 // Get all schemas
 export const GET: RequestHandler = async ({ params }) => {
@@ -32,7 +31,6 @@ export const PUT: RequestHandler = async ({ request, url, params }) => {
 
 		const collection = mongo.db.collection(SCHEMA_COLLECTION_NAME);
 		const res = await collection.findOneAndUpdate({ name }, { $set: body });
-		console.log(res);
 		return res;
 	});
 

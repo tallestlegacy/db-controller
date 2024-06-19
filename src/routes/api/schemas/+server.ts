@@ -1,8 +1,8 @@
-import type { RequestHandler } from './$types';
-
-import mongo from '@/../routes/api/mongo.server';
 import { SCHEMA_COLLECTION_NAME } from '$env/static/private';
+import mongo from '@/../routes/api/mongo.server';
 import { json } from '@sveltejs/kit';
+
+import type { RequestHandler } from './$types';
 
 // Get all schemas
 export const GET: RequestHandler = async () => {
@@ -11,7 +11,6 @@ export const GET: RequestHandler = async () => {
 		const cursor = collection.find({}, { projection: { fields: 0 } });
 		return await mongo.readCursor(cursor);
 	});
-	console.log(res);
 
 	return json(res);
 };
