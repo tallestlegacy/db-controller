@@ -33,7 +33,7 @@
 
 	docQuery.subscribe(({ data }) => {
 		if (!isInitialised && data && !isNew) {
-			form = { ...form, ...data.data };
+			form = { ...form, ...data };
 			isInitialised = true;
 		}
 	});

@@ -1,6 +1,7 @@
-import type { RequestHandler } from './$types';
 import mongo from '@/../routes/api/mongo.server';
 import { error, json } from '@sveltejs/kit';
+
+import type { RequestHandler } from './$types';
 
 // Get all documents from an arbitrary collection
 
@@ -32,11 +33,9 @@ export const POST: RequestHandler = async ({ params, request }) => {
 		const res = await mongo.run(async function () {
 			const collection = mongo.db.collection(collectionName);
 			const res = await collection.insertOne({
-				data: body,
-				metadata: {
-					createdAt: date,
-					updatedAt: date
-				}
+				...body,
+				_createdAt: date,
+				_updatedAt: date
 			});
 			return res.insertedId;
 		});

@@ -38,7 +38,7 @@
 								{id.name}
 							</span>
 							<span class="overflow-hidden text-ellipsis font-semibold">
-								{doc.data[id.name]}
+								{doc[id.name]}
 							</span>
 						{/each}
 					{/if}
