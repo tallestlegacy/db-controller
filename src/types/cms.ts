@@ -6,7 +6,7 @@ export enum Primitive {
 	STRING = 'STRING',
 	TEXT = 'TEXT',
 	DATE = 'DATE',
-	MARKDOWN = 'MARKDOWN'
+	MARKDOWN = 'MARKDOWN',
 	// DATETIME = 'DATETIME'
 	// GEOPOINT = "GEOPOINT",
 }

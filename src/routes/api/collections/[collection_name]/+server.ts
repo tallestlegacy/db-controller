@@ -1,4 +1,4 @@
-import mongo from '@/../routes/api/mongo.server';
+import mongo from '$db/mongo';
 import { error, json } from '@sveltejs/kit';
 
 import type { RequestHandler } from './$types';
@@ -8,17 +8,11 @@ import type { RequestHandler } from './$types';
 export const GET: RequestHandler = async ({ params }) => {
 	const collectionName = params.collection_name;
 
-	try {
-		const res = await mongo.run(async function () {
-			const collection = mongo.db.collection(collectionName);
-			const cursor = collection.find({});
-			return await mongo.readCursor(cursor);
-		});
+	const collection = mongo.db.collection(collectionName);
+	const cursor = collection.find({});
+	const res = await mongo.readCursor(cursor);
 
-		return json(res);
-	} catch (e) {
-		return error(500, Error(JSON.stringify(e)));
-	}
+	return json(res);
 };
 
 // Create arbitrary document
@@ -29,19 +23,12 @@ export const POST: RequestHandler = async ({ params, request }) => {
 
 	const date = new Date();
 
-	try {
-		const res = await mongo.run(async function () {
-			const collection = mongo.db.collection(collectionName);
-			const res = await collection.insertOne({
-				...body,
-				_createdAt: date,
-				_updatedAt: date
-			});
-			return res.insertedId;
-		});
+	const collection = mongo.db.collection(collectionName);
+	const res = await collection.insertOne({
+		...body,
+		_createdAt: date,
+		_updatedAt: date,
+	});
 
-		return json(res);
-	} catch (e) {
-		return error(500, Error(JSON.stringify(e)));
-	}
+	return json(res.insertedId);
 };

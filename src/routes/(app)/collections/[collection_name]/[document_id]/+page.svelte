@@ -6,7 +6,7 @@
 		createDocument,
 		deleteDocument,
 		updateDocument,
-		useGetSingleDocument
+		useGetSingleDocument,
 	} from '@/queries/collections';
 	import { Button } from '@/components/ui/button';
 	import { goto } from '$app/navigation';

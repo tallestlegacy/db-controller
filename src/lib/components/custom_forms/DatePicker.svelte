@@ -7,7 +7,7 @@
 	import * as Popover from '@/components/ui/popover';
 
 	const df = new DateFormatter('en-US', {
-		dateStyle: 'long'
+		dateStyle: 'long',
 	});
 
 	interface Props {
@@ -35,7 +35,7 @@
 			variant="outline"
 			class={cn(
 				'w-full justify-start text-left font-normal' + className,
-				!value && 'text-muted-foreground'
+				!value && 'text-muted-foreground',
 			)}
 			builders={[builder]}
 		>

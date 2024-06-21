@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { Command as CommandPrimitive } from "cmdk-sv";
-	import { cn } from "@/utils.js";
+	import { Command as CommandPrimitive } from 'cmdk-sv';
+	import { cn } from '@/utils.js';
 
 	type $$Props = CommandPrimitive.ItemProps;
 
@@ -13,8 +13,8 @@
 <CommandPrimitive.Item
 	{asChild}
 	class={cn(
-		"relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50",
-		className
+		'relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none aria-selected:bg-accent aria-selected:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+		className,
 	)}
 	{...$$restProps}
 	let:action

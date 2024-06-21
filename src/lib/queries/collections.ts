@@ -10,7 +10,7 @@ export async function createCollection(collectionName: string) {
 	return await (
 		await fetch('/api/collections', {
 			method: 'POST',
-			body: JSON.stringify({ collectionName })
+			body: JSON.stringify({ collectionName }),
 		})
 	).json();
 }
@@ -20,6 +20,7 @@ export async function getAllDocuments(collectionName: string) {
 }
 
 export function useGetAllDocuments(collectionName: string) {
+	console.log(collectionName);
 	return useQuery(['all-documents', collectionName], async function () {
 		return await getAllDocuments(collectionName);
 	});
@@ -32,7 +33,7 @@ export async function getSingleDocument(collectionName: string, documentId: stri
 export function useGetSingleDocument(collectionName: string, documentId: string) {
 	return useQuery(
 		['document', collectionName, documentId],
-		async () => await getSingleDocument(collectionName, documentId)
+		async () => await getSingleDocument(collectionName, documentId),
 	);
 }
 
@@ -40,7 +41,7 @@ export async function createDocument(collectionName: string, form: any) {
 	return await (
 		await fetch(`/api/collections/${collectionName}`, {
 			method: 'POST',
-			body: JSON.stringify(form)
+			body: JSON.stringify(form),
 		})
 	).json();
 }
@@ -52,7 +53,7 @@ export async function updateDocument(collectionName: string, documentId: string,
 	return await (
 		await fetch(`/api/collections/${collectionName}/${documentId}`, {
 			method: 'PUT',
-			body: JSON.stringify(form)
+			body: JSON.stringify(form),
 		})
 	).json();
 }

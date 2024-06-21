@@ -6,5 +6,5 @@ export const FieldTypes = [
 	[Primitive.STRING, 'Short text'],
 	[Primitive.TEXT, 'Long text'],
 	[Primitive.DATE, 'Date'],
-	[Primitive.MARKDOWN, 'Prose']
+	[Primitive.MARKDOWN, 'Prose'],
 ].map(([value, label]) => ({ value, label }));

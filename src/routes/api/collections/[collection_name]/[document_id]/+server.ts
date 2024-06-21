@@ -1,4 +1,4 @@
-import mongo from '@/../routes/api/mongo.server';
+import mongo from '$db/mongo';
 import { error, json } from '@sveltejs/kit';
 import { ObjectId } from 'mongodb';
 
@@ -9,10 +9,8 @@ export const GET: RequestHandler = async ({ params }) => {
 	const collectionName = params.collection_name;
 	const _id = new ObjectId(params.document_id);
 
-	const res = await mongo.run(async function () {
-		const collection = mongo.db.collection(collectionName);
-		return collection.findOne({ _id });
-	});
+	const collection = mongo.db.collection(collectionName);
+	const res = collection.findOne({ _id });
 
 	return json(res);
 };
@@ -24,25 +22,18 @@ export const PUT: RequestHandler = async ({ params, request }) => {
 	const body = await request.json();
 	delete body._id;
 
-	try {
-		const res = await mongo.run(async function () {
-			const collection = mongo.db.collection(collectionName);
-			const res = await collection.updateOne(
-				{ _id },
-				{
-					$set: {
-						...body,
-						_updatedAt: new Date()
-					}
-				}
-			);
-			return res.modifiedCount;
-		});
+	const collection = mongo.db.collection(collectionName);
+	const res = await collection.updateOne(
+		{ _id },
+		{
+			$set: {
+				...body,
+				_updatedAt: new Date(),
+			},
+		},
+	);
 
-		return json(res);
-	} catch (e) {
-		return error(500, Error(JSON.stringify(e)));
-	}
+	return json(res);
 };
 
 // Find an arbitrary document
@@ -50,10 +41,8 @@ export const DELETE: RequestHandler = async ({ params }) => {
 	const collectionName = params.collection_name;
 	const _id = new ObjectId(params.document_id);
 
-	const res = await mongo.run(async function () {
-		const collection = mongo.db.collection(collectionName);
-		return await collection.deleteOne({ _id });
-	});
+	const collection = mongo.db.collection(collectionName);
+	const res = await collection.deleteOne({ _id });
 
 	return json(res);
 };

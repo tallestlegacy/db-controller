@@ -7,7 +7,7 @@
 	import { useGetSchema } from '@/queries/schemas';
 
 	// @ts-ignore
-	const collection_name = $page.params.collection_name;
+	let collection_name = $page.params.collection_name;
 	const query = useGetAllDocuments(collection_name);
 	const schemaQuery = useGetSchema(collection_name);
 </script>
