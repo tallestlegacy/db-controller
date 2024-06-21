@@ -25,14 +25,14 @@
 		name: '',
 		description: '',
 		type: 'STRING',
-		isIdentifier: false
+		isIdentifier: false,
 	};
 
 	let form: Collection = $state({
 		title: '',
 		name: '',
 		description: '',
-		fields: []
+		fields: [],
 	});
 
 	let isButtonDisabled = $derived(loading || !form.name);
