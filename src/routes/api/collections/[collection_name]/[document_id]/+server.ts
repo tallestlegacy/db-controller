@@ -10,7 +10,7 @@ export const GET: RequestHandler = async ({ params }) => {
 	const _id = new ObjectId(params.document_id);
 
 	const collection = mongo.db.collection(collectionName);
-	const res = collection.findOne({ _id });
+	const res = await collection.findOne({ _id });
 
 	return json(res);
 };
