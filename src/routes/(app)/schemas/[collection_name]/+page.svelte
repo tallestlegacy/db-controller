@@ -56,7 +56,7 @@
 			if (isNew) {
 				const redirectID = await createSchema(form);
 				queryClient.invalidateQueries('all-schemas');
-				goto(`/schemas/${redirectID}`, { replaceState: true });
+				goto(`/schemas/${form.name}`, { replaceState: true });
 			} else {
 				await updateSchema(collectionIdentifier, form);
 			}
