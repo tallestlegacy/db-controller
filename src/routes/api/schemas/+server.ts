@@ -18,6 +18,7 @@ export const POST: RequestHandler = async ({ request }) => {
 
 	const collection = mongo.db.collection(SCHEMA_COLLECTION_NAME);
 	const res = await collection.insertOne(body);
+	mongo.db.createCollection(body.name);
 
 	return json(res.insertedId);
 };

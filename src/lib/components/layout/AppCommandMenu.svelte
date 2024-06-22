@@ -1,13 +1,9 @@
 <script lang="ts">
-	import Calculator from 'lucide-svelte/icons/calculator';
-	import Calendar from 'lucide-svelte/icons/calendar';
-	import CreditCard from 'lucide-svelte/icons/credit-card';
-	import Settings from 'lucide-svelte/icons/settings';
-	import Smile from 'lucide-svelte/icons/smile';
-	import User from 'lucide-svelte/icons/user';
 	import { onMount } from 'svelte';
 	import * as Command from '$lib/components/ui/command/index.js';
 	import { toggleMode } from 'mode-watcher';
+	import { ClipboardList, ClipboardPlus, FileStack, SunMoon } from 'lucide-svelte';
+	import { goto } from '$app/navigation';
 
 	let open = $state(false);
 
@@ -24,15 +20,42 @@
 			document.removeEventListener('keydown', handleKeydown);
 		};
 	});
+
+	function navigate(arg: string) {
+		return () => {
+			open = false;
+			goto(arg);
+		};
+	}
 </script>
 
 <Command.Dialog bind:open>
 	<Command.Input placeholder="Type a command or search..." />
 	<Command.List>
 		<Command.Empty>No results found.</Command.Empty>
-		<Command.Group heading="Suggestions">
+		<!-- actions -->
+		<Command.Group heading="App actions">
+			<Command.Item onSelect={navigate('/collections')}>
+				<FileStack class="mr-2 h-4 w-4" />
+				<span>View all collections</span>
+			</Command.Item>
+			<Command.Item onSelect={navigate('/schemas')}>
+				<ClipboardList class="mr-2 h-4 w-4" />
+				<span>View all schemas</span>
+			</Command.Item>
+			<Command.Item onSelect={navigate('/schemas/$create')}>
+				<ClipboardPlus class="mr-2 h-4 w-4" />
+				<span>View all schemas</span>
+				<span>Create a new schema</span>
+			</Command.Item>
+		</Command.Group>
+
+		<Command.Separator />
+
+		<!-- app settings -->
+		<Command.Group heading="Settings">
 			<Command.Item onSelect={toggleMode}>
-				<Calculator class="mr-2 h-4 w-4" />
+				<SunMoon class="mr-2 h-4 w-4" />
 				<span>Toggle mode (dark/light)</span>
 			</Command.Item>
 		</Command.Group>

@@ -10,6 +10,7 @@
 	import { goto } from '$app/navigation';
 	import { useQueryClient } from '@sveltestack/svelte-query';
 	import SchemaField from '../components/SchemaField.svelte';
+	import SchemaActionBar from './SchemaActionBar.svelte';
 
 	const queryClient = useQueryClient();
 	// const schemasQuery = useGetAllSchemas();
@@ -76,66 +77,75 @@
 	});
 </script>
 
-<div class=" flex flex-col gap-8 px-4 py-16">
-	<section class="mx-auto flex w-full max-w-screen-md flex-col gap-8">
-		<h3 class="text-xl font-bold uppercase text-muted-foreground">Schema info</h3>
+<div class="h-screen overflow-auto border-r">
+	<SchemaActionBar />
 
-		<div class="flex flex-col gap-8">
-			<Field
-				label="Title"
-				bind:value={form.title}
-				type="STRING"
-				placeholder="eg. Period blog posts"
-			/>
-			<Field
-				label="Collection name"
-				disabled={!isNew}
-				bind:value={form.name}
-				type="STRING"
-				placeholder="eg. BlogPosts (no spaced or special characters)"
-			/>
-			<Field type="TEXT" bind:value={form.description} label="Description" placeholder="Optional" />
-		</div>
-	</section>
+	<div class=" flex flex-col gap-8 px-4 py-16">
+		<section class="mx-auto flex w-full max-w-screen-md flex-col gap-8">
+			<h3 class="text-xl font-bold uppercase text-muted-foreground">Schema info</h3>
 
-	<Separator />
+			<div class="flex flex-col gap-8">
+				<Field
+					label="Title"
+					bind:value={form.title}
+					type="STRING"
+					placeholder="eg. Period blog posts"
+				/>
+				<Field
+					label="Collection name"
+					disabled={!isNew}
+					bind:value={form.name}
+					type="STRING"
+					placeholder="eg. BlogPosts (no spaced or special characters)"
+				/>
+				<Field
+					type="TEXT"
+					bind:value={form.description}
+					label="Description"
+					placeholder="Optional"
+				/>
+			</div>
+		</section>
 
-	<section class="mx-auto flex w-full max-w-screen-md flex-col gap-8">
-		<h3 class="text-xl font-bold uppercase text-muted-foreground">Fields</h3>
+		<Separator />
 
-		<Accordion.Root bind:value={showing}>
-			{#each form.fields as _field, index}
-				<Accordion.Item value={index.toString()}>
-					<Accordion.AccordionTrigger>
-						<div class="flex w-full items-center justify-between pe-4">
-							<div class="font-bold {_field?.isIdentifier ? 'text-primary' : ''}">
-								<span> {index + 1} </span> :
-								<span
-									>{_field.title ? _field.title : _field.name ? _field.name : 'Empty field'}</span
+		<section class="mx-auto flex w-full max-w-screen-md flex-col gap-8">
+			<h3 class="text-xl font-bold uppercase text-muted-foreground">Fields</h3>
+
+			<Accordion.Root bind:value={showing}>
+				{#each form.fields as _field, index}
+					<Accordion.Item value={index.toString()}>
+						<Accordion.AccordionTrigger>
+							<div class="flex w-full items-center justify-between pe-4">
+								<div class="font-bold {_field?.isIdentifier ? 'text-primary' : ''}">
+									<span> {index + 1} </span> :
+									<span
+										>{_field.title ? _field.title : _field.name ? _field.name : 'Empty field'}</span
+									>
+								</div>
+								<Button
+									size="icon"
+									variant="destructive"
+									class="scale-[0.75]"
+									on:click={() => removeField(index)}><Trash /></Button
 								>
 							</div>
-							<Button
-								size="icon"
-								variant="destructive"
-								class="scale-[0.75]"
-								on:click={() => removeField(index)}><Trash /></Button
-							>
-						</div>
-					</Accordion.AccordionTrigger>
-					<Accordion.AccordionContent>
-						<SchemaField bind:value={form.fields[index]} />
-					</Accordion.AccordionContent>
-				</Accordion.Item>
-			{/each}
-		</Accordion.Root>
-		<Button variant="outline" on:click={addField}>Add new field</Button>
-	</section>
+						</Accordion.AccordionTrigger>
+						<Accordion.AccordionContent>
+							<SchemaField bind:value={form.fields[index]} />
+						</Accordion.AccordionContent>
+					</Accordion.Item>
+				{/each}
+			</Accordion.Root>
+			<Button variant="outline" on:click={addField}>Add new field</Button>
+		</section>
 
-	<Separator />
+		<Separator />
 
-	<section class="mx-auto flex w-full max-w-screen-md flex-col gap-8">
-		<Button on:click={save} disabled={isButtonDisabled} class="flex-1">
-			{isNew ? 'Create' : 'Update'}
-		</Button>
-	</section>
+		<section class="mx-auto flex w-full max-w-screen-md flex-col gap-8">
+			<Button on:click={save} disabled={isButtonDisabled} class="flex-1">
+				{isNew ? 'Create' : 'Update'}
+			</Button>
+		</section>
+	</div>
 </div>
