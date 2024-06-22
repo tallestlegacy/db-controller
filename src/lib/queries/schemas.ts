@@ -1,14 +1,22 @@
 import type { Collection } from '@/../types/cms';
 import { useQuery } from '@sveltestack/svelte-query';
+import { toast } from 'svelte-sonner';
 
 // returns the inserted id, possibly for redirection
 export async function createSchema(form: Collection) {
-	return await (
-		await fetch('/api/schemas', {
-			method: 'POST',
-			body: JSON.stringify(form),
-		})
-	).json();
+	const _toast = toast.loading(`Creating schema for "${form.name}"`);
+	try {
+		return await (
+			await fetch('/api/schemas', {
+				method: 'POST',
+				body: JSON.stringify(form),
+			})
+		).json();
+	} catch (e) {
+		toast.error('Something went wrong!');
+	} finally {
+		toast.dismiss(_toast);
+	}
 }
 
 export async function getSchemas() {
@@ -28,10 +36,20 @@ export function useGetSchema(name: string) {
 }
 
 export async function updateSchema(_id: string, form: Collection) {
-	return await (
-		await fetch(`/api/schemas/${_id}`, {
-			method: 'PUT',
-			body: JSON.stringify(form),
-		})
-	).json();
+	const _toast = toast.loading(`Updating schema for "${form.name}"`);
+	try {
+		const res = await (
+			await fetch(`/api/schemas/${_id}`, {
+				method: 'PUT',
+				body: JSON.stringify(form),
+			})
+		).json();
+
+		toast.success('Updated!!');
+		return res;
+	} catch (e) {
+		toast.error('Something went wrong!');
+	} finally {
+		toast.dismiss(_toast);
+	}
 }
